@@ -10,7 +10,7 @@ import Miners from "./components/Miners";
 import Pickaxes from "./components/Pickaxes";
 import values from "./values/Values";
 import SmoothNumber from "./components/AnimatedValue";
-import { Resources } from "./types/resources";
+import { Resources } from "./types/Resources";
 import SmartMiners from "./components/SmartMiners";
 
 export default function App() {

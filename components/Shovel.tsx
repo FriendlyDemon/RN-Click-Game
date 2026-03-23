@@ -1,24 +1,32 @@
 import { Image, Text, TouchableOpacity } from "react-native";
 import React from "react";
 import { styles } from "../styles/style";
-import { Upgrade } from "../classes/Upgrades";
+import Upgrade from "../classes/Upgrade";
+import { buyOne } from "../functions/Buy";
+import { simplifyNumbers } from "../functions/SimplifyNumber";
 
-function Shovel(props: { clicker: Upgrade; buy: CallableFunction }) {
+function Shovel({ shovel, gold }: { shovel: Upgrade; gold: number }) {
   return (
     <TouchableOpacity
       style={styles.upgradeBox}
       onPress={() => {
-        props.buy(props.clicker);
+        buyOne(gold, shovel);
       }}
     >
-      <Text>Shovel Level: {props.clicker.getLevel()}</Text>
+      <Text>Shovel Level: {shovel.getLevel()}</Text>
       <Text style={styles.ShovelText}>
-        Cost: {props.clicker.getCurrentCost()}{" "}
-        <Image style={styles.icons} source={require("../assets/gold.png")} />
+        Cost: {simplifyNumbers(shovel.getCurrentCost())}{" "}
+        <Image
+          style={styles.icons}
+          source={require("../assets/gold_outline.png")}
+        />
       </Text>
       <Text style={styles.ShovelText}>
-        <Image style={styles.icons} source={require("../assets/bone.png")} />{" "}
-        per Click: {props.clicker.getLevel() + 1}
+        <Image
+          style={styles.icons}
+          source={require("../assets/bone_outline.png")}
+        />{" "}
+        per Click: {shovel.getLevel() + 1}
       </Text>
     </TouchableOpacity>
   );

@@ -2,38 +2,43 @@ import { Image, Text, TouchableOpacity } from "react-native";
 import React from "react";
 import { styles } from "../styles/style";
 import Upgrade from "../classes/Upgrade";
-import Values from "../values/Values";
 import { buyOne } from "../functions/Buy";
 import { simplifyNumbers } from "../functions/SimplifyNumber";
 
-function SmartMiners({
-  smartMiners,
-  bones,
+function GraveDiggers({
+  graveDigger,
+  click,
+  gold,
 }: {
-  smartMiners: Upgrade;
-  bones: number;
+  graveDigger: Upgrade;
+  click: number;
+  gold: number;
 }) {
   return (
     <TouchableOpacity
       style={styles.upgradeBox}
       onPress={() => {
-        buyOne(bones, smartMiners);
+        buyOne(gold, graveDigger);
       }}
     >
-      <Text>Smarter Miners: {smartMiners.getLevel()}</Text>
+      <Text>Grave Diggers: {graveDigger.getLevel()}</Text>
       <Text style={styles.MinersText}>
-        Cost: {simplifyNumbers(smartMiners.getCurrentCost())}{" "}
+        Cost: {simplifyNumbers(graveDigger.getCurrentCost())}{" "}
         <Image
           style={styles.icons}
-          source={require("../assets/bone_outline.png")}
+          source={require("../assets/gold_outline.png")}
         />
       </Text>
       <Text style={styles.MinersText}>
-        Bonus production per miner:{" "}
-        {smartMiners.getLevel() * Values.SMART_MINER_BONUS * 100}%
+        <Image
+          style={styles.icons}
+          source={require("../assets/bone_outline.png")}
+        />{" "}
+        : {simplifyNumbers((graveDigger.getLevel() * click) / 2)}
+        /s
       </Text>
     </TouchableOpacity>
   );
 }
 
-export default SmartMiners;
+export default GraveDiggers;

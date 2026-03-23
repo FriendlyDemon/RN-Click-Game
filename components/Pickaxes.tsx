@@ -1,27 +1,34 @@
 import { Image, Text, TouchableOpacity } from "react-native";
 import React from "react";
 import { styles } from "../styles/style";
-import { Upgrade } from "../classes/Upgrades";
+import Upgrade from "../classes/Upgrade";
 import values from "../values/Values";
+import { buyOne } from "../functions/Buy";
+import { simplifyNumbers } from "../functions/SimplifyNumber";
 
-function Pickaxes(props: { pickaxes: Upgrade; buy: CallableFunction }) {
+function Pickaxes({ pickaxes, gold }: { pickaxes: Upgrade; gold: number }) {
   return (
     <TouchableOpacity
       style={styles.upgradeBox}
       onPress={() => {
-        props.buy();
+        buyOne(gold, pickaxes);
       }}
     >
-      <Text>Pickaxe Level: {props.pickaxes.getLevel()}</Text>
+      <Text>Pickaxe Level: {pickaxes.getLevel()}</Text>
       <Text style={styles.MinersText}>
-        Cost: {props.pickaxes.getCurrentCost()}{" "}
-        <Image style={styles.icons} source={require("../assets/gold.png")} />
+        Cost: {simplifyNumbers(pickaxes.getCurrentCost())}{" "}
+        <Image
+          style={styles.icons}
+          source={require("../assets/gold_outline.png")}
+        />
       </Text>
       <Text style={styles.MinersText}>
         Base{" "}
-        <Image style={styles.icons} source={require("../assets/gold.png")} />{" "}
-        per miner:{" "}
-        {1 + props.pickaxes.getLevel() * values.PICKAXE_MINERS_INCREASE}
+        <Image
+          style={styles.icons}
+          source={require("../assets/gold_outline.png")}
+        />{" "}
+        per miner: {1 + pickaxes.getLevel() * values.PICKAXE_MINERS_INCREASE}
       </Text>
     </TouchableOpacity>
   );

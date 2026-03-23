@@ -1,35 +1,51 @@
 import { Image, Text, TouchableOpacity } from "react-native";
 import React from "react";
 import { styles } from "../styles/style";
-import { Upgrade } from "../classes/Upgrades";
+import Upgrade from "../classes/Upgrade";
 import values from "../values/Values";
+import { buyOne } from "../functions/Buy";
+import { simplifyNumbers } from "../functions/SimplifyNumber";
 
-function Miners(props: {
+function Miners({
+  miners,
+  pickaxe,
+  smartMiners,
+  bones,
+}: {
   miners: Upgrade;
   pickaxe: Upgrade;
   smartMiners: Upgrade;
-  buy: CallableFunction;
+  bones: number;
 }) {
   return (
     <TouchableOpacity
       style={styles.upgradeBox}
       onPress={() => {
-        props.buy();
+        buyOne(bones, miners);
       }}
     >
-      <Text>Skeleton Miners: {props.miners.getLevel()}</Text>
+      <Text>Skeleton Miners: {miners.getLevel()}</Text>
       <Text style={styles.MinersText}>
-        Cost: {props.miners.getCurrentCost()}{" "}
-        <Image style={styles.icons} source={require("../assets/bone.png")} />
+        Cost: {simplifyNumbers(miners.getCurrentCost())}{" "}
+        <Image
+          style={styles.icons}
+          source={require("../assets/bone_outline.png")}
+        />
       </Text>
       <Text style={styles.MinersText}>
-        <Image style={styles.icons} source={require("../assets/gold.png")} /> :{" "}
-        {(props.miners.getLevel() *
-          (1 + props.pickaxe.getLevel() * values.PICKAXE_MINERS_INCREASE) *
-          Math.pow(
-            1 + props.smartMiners.getLevel() * values.SMART_MINER_BONUS,
-            props.miners.getLevel(),
-          )).toFixed(2)}
+        <Image
+          style={styles.icons}
+          source={require("../assets/gold_outline.png")}
+        />{" "}
+        :{" "}
+        {simplifyNumbers(
+          miners.getLevel() *
+            (1 + pickaxe.getLevel() * values.PICKAXE_MINERS_INCREASE) *
+            Math.pow(
+              1 + smartMiners.getLevel() * values.SMART_MINER_BONUS,
+              miners.getLevel(),
+            ),
+        )}
         /s
       </Text>
     </TouchableOpacity>

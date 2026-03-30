@@ -5,6 +5,7 @@ import Animated, {
   withTiming,
   Easing,
 } from "react-native-reanimated";
+import { simplifyNumbers } from "../functions/SimplifyNumber";
 
 export default function SmoothNumber({ value }: { value: number }) {
   const target = useSharedValue(value);
@@ -21,11 +22,5 @@ export default function SmoothNumber({ value }: { value: number }) {
     });
   });
 
-  return (
-    <Animated.Text>
-      {display.value > 1e6
-        ? display.value.toExponential(3)
-        : Math.floor(display.value)}
-    </Animated.Text>
-  );
+  return <Animated.Text>{simplifyNumbers(display.value)}</Animated.Text>;
 }

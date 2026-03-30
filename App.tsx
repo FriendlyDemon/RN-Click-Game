@@ -14,6 +14,7 @@ import SmoothNumber from "./components/AnimatedValue";
 import SmartMiners from "./components/SmartMiners";
 import GraveDiggers from "./components/GraveDiggers";
 import { simplifyNumbers } from "./functions/SimplifyNumber";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function App() {
   const [displayResources, setDisplayResources] = useState<{
@@ -23,29 +24,31 @@ export default function App() {
     gold: 0,
     bones: 0,
   });
-  const bones: React.RefObject<number> = useRef(0);
-  const gold: React.RefObject<number> = useRef(0);
-  const GPS: React.RefObject<number> = useRef(0);
-  const BPS: React.RefObject<number> = useRef(0);
-  const clickIncrement: React.RefObject<number> = useRef(1);
-  const shovel: React.RefObject<Upgrade> = useRef(
+  const bones = useRef<number>(0);
+  const gold = useRef<number>(0);
+  const GPS = useRef<number>(0);
+  const BPS = useRef<number>(0);
+  const clickIncrement = useRef<number>(1);
+  const shovel = useRef<Upgrade>(
     new Upgrade(values.SHOVELS_COST, values.SHOVELS_COST_INCREASE),
   );
-  const miners: React.RefObject<Upgrade> = useRef(
+  const miners = useRef<Upgrade>(
     new Upgrade(values.MINERS_COST, values.MINERS_COST_INCREASE),
   );
-  const pickaxes: React.RefObject<Upgrade> = useRef(
+  const pickaxes = useRef<Upgrade>(
     new Upgrade(values.PICKAXE_COST, values.PICKAXE_COST_INCREASE),
   );
-  const smartMiners: React.RefObject<Upgrade> = useRef(
+  const smartMiners = useRef<Upgrade>(
     new Upgrade(values.SMART_MINER_COST, values.SMART_MINER_COST_INCREASE),
   );
-  const graveDiggers: React.RefObject<Upgrade> = useRef(
+  const graveDiggers = useRef<Upgrade>(
     new Upgrade(values.GRAVE_DIGGER_COST, values.GRAVE_DIGGER_COST_INCREASE),
   );
-  const timePass: React.RefObject<boolean> = useRef(true);
-  const saveInterval: React.RefObject<number> = useRef(500);
-  let saveTimer: NodeJS.Timeout;
+  const timePass = useRef<boolean>(true);
+  const lastTime = useRef<number>(Date.now());
+  const uiTimer = useRef<number>(0);
+  const saveTimer = useRef<number>(0);
+  const saveInterval = useRef<number>(15);
 
   function calcGPS() {
     GPS.current =
@@ -91,6 +94,8 @@ export default function App() {
 
       gold.current = save.gold;
       bones.current = save.bones;
+      lastTime.current = save.lastTime;
+      saveInterval.current = save.saveInterval;
       shovel.current.setLevel(save.shovel);
       miners.current.setLevel(save.miners);
       pickaxes.current.setLevel(save.pickaxes);
@@ -103,10 +108,12 @@ export default function App() {
   }
 
   async function save() {
-    const upgrades: string = JSON.stringify(
+    const newSave: string = JSON.stringify(
       new Save(
         bones.current,
         gold.current,
+        lastTime.current,
+        saveInterval.current,
         shovel.current.getLevel(),
         miners.current.getLevel(),
         pickaxes.current.getLevel(),
@@ -115,13 +122,7 @@ export default function App() {
       ),
     );
 
-    await AsyncStorage.setItem("@save", upgrades);
-  }
-
-  function changeSaveInterval(newIenterval: number) {
-    saveInterval.current = newIenterval;
-    clearInterval(saveTimer);
-    setInterval(save, newIenterval);
+    await AsyncStorage.setItem("@save", newSave);
   }
 
   async function deleteSave() {
@@ -136,15 +137,8 @@ export default function App() {
     calcClick();
     calcGPS();
 
-    await AsyncStorage.removeItem("@save", load);
+    await AsyncStorage.removeItem("@save");
     timePass.current = true;
-  }
-
-  function increment() {
-    if (timePass.current) {
-      gold.current += GPS.current / 10;
-      bones.current += BPS.current / 10;
-    }
   }
 
   function updateResources() {
@@ -156,18 +150,49 @@ export default function App() {
     }
   }
 
+  function tick(deltaTime: number) {
+    if (!timePass.current) return;
+
+    gold.current += GPS.current * deltaTime;
+    bones.current += BPS.current * deltaTime;
+
+    uiTimer.current += deltaTime;
+
+    if (uiTimer.current >= 0.2) {
+      setDisplayResources({
+        gold: gold.current,
+        bones: bones.current,
+      });
+      uiTimer.current = 0;
+    }
+
+    saveTimer.current += deltaTime;
+
+    if (saveTimer.current >= saveInterval.current) save();
+  }
+
   useEffect(() => {
-    load();
+    let animationFrameId: number;
 
-    const incrementTimer = setInterval(increment, 100);
-    const updateDisplay = setInterval(updateResources, 200);
-    saveTimer = setInterval(save, saveInterval.current);
+    async function init() {
+      await load();
 
-    return () => {
-      clearInterval(saveTimer);
-      clearInterval(incrementTimer);
-      clearInterval(updateDisplay);
-    };
+      function gameLoop() {
+        const now = Date.now();
+        const deltaTime = (now - lastTime.current) / 1000;
+        lastTime.current = now;
+
+        tick(deltaTime);
+
+        animationFrameId = requestAnimationFrame(gameLoop);
+      }
+
+      gameLoop();
+    }
+
+    init();
+
+    return () => cancelAnimationFrame(animationFrameId);
   }, []);
 
   return (
@@ -218,21 +243,51 @@ export default function App() {
                 miners={miners.current}
                 pickaxe={pickaxes.current}
                 smartMiners={smartMiners.current}
-                bones={bones.current}
+                bones={bones}
+                calcGPS={calcGPS}
               />
-              <Shovel shovel={shovel.current} gold={gold.current} />
+              <Shovel
+                shovel={shovel.current}
+                gold={gold}
+                calcClick={calcClick}
+              />
               <GraveDiggers
                 graveDigger={graveDiggers.current}
                 click={clickIncrement.current}
-                gold={gold.current}
+                gold={gold}
+                calcBPS={calcBPS}
               />
               <SmartMiners
                 smartMiners={smartMiners.current}
-                bones={bones.current}
+                bones={bones}
+                calcGPS={calcGPS}
               />
-              <Pickaxes pickaxes={pickaxes.current} gold={gold.current} />
+              <Pickaxes
+                pickaxes={pickaxes.current}
+                gold={gold}
+                calcGPS={calcGPS}
+              />
             </ScrollView>
           </View>
+        </View>
+        <View>
+          <TouchableOpacity
+            onPress={() => {
+              deleteSave();
+            }}
+          >
+            <Text>Delete Save</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              timePass.current = !timePass.current;
+            }}
+          >
+            <Text>{timePass.current ? "pause" : "resume"}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => {}}>
+            <Ionicons name="settings-outline" size={40} color="#cccccc" />
+          </TouchableOpacity>
         </View>
         <StatusBar style="auto" />
       </SafeAreaView>

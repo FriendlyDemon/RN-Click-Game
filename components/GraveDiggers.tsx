@@ -9,16 +9,18 @@ function GraveDiggers({
   graveDigger,
   click,
   gold,
+  calcBPS,
 }: {
   graveDigger: Upgrade;
   click: number;
-  gold: number;
+  gold: React.RefObject<number>;
+  calcBPS: CallableFunction;
 }) {
   return (
     <TouchableOpacity
       style={styles.upgradeBox}
       onPress={() => {
-        buyOne(gold, graveDigger);
+        if (buyOne(gold, graveDigger)) calcBPS();
       }}
     >
       <Text>Grave Diggers: {graveDigger.getLevel()}</Text>

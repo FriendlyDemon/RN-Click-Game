@@ -6,12 +6,20 @@ import values from "../values/Values";
 import { buyOne } from "../functions/Buy";
 import { simplifyNumbers } from "../functions/SimplifyNumber";
 
-function Pickaxes({ pickaxes, gold }: { pickaxes: Upgrade; gold: number }) {
+function Pickaxes({
+  pickaxes,
+  gold,
+  calcGPS,
+}: {
+  pickaxes: Upgrade;
+  gold: React.RefObject<number>;
+  calcGPS: CallableFunction;
+}) {
   return (
     <TouchableOpacity
       style={styles.upgradeBox}
       onPress={() => {
-        buyOne(gold, pickaxes);
+        if (buyOne(gold, pickaxes)) calcGPS();
       }}
     >
       <Text>Pickaxe Level: {pickaxes.getLevel()}</Text>

@@ -1,6 +1,8 @@
 export default class Save {
   bones: number;
   gold: number;
+  lastTime: number;
+  saveInterval: number;
   shovel: number;
   miners: number;
   pickaxes: number;
@@ -9,7 +11,9 @@ export default class Save {
 
   constructor(
     bones: number,
-    counter: number,
+    gold: number,
+    lastTime: number,
+    saveInterval: number,
     shovel: number,
     miners: number,
     pickaxes: number,
@@ -17,7 +21,9 @@ export default class Save {
     graveDiggers: number,
   ) {
     this.bones = bones;
-    this.gold = counter;
+    this.gold = gold;
+    this.lastTime = lastTime;
+    this.saveInterval = saveInterval;
     this.shovel = shovel;
     this.miners = miners;
     this.pickaxes = pickaxes;

@@ -5,12 +5,20 @@ import Upgrade from "../classes/Upgrade";
 import { buyOne } from "../functions/Buy";
 import { simplifyNumbers } from "../functions/SimplifyNumber";
 
-function Shovel({ shovel, gold }: { shovel: Upgrade; gold: number }) {
+function Shovel({
+  shovel,
+  gold,
+  calcClick,
+}: {
+  shovel: Upgrade;
+  gold: React.RefObject<number>;
+  calcClick: CallableFunction;
+}) {
   return (
     <TouchableOpacity
       style={styles.upgradeBox}
       onPress={() => {
-        buyOne(gold, shovel);
+        if (buyOne(gold, shovel)) calcClick();
       }}
     >
       <Text>Shovel Level: {shovel.getLevel()}</Text>

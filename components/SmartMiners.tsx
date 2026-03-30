@@ -9,15 +9,17 @@ import { simplifyNumbers } from "../functions/SimplifyNumber";
 function SmartMiners({
   smartMiners,
   bones,
+  calcGPS,
 }: {
   smartMiners: Upgrade;
-  bones: number;
+  bones: React.RefObject<number>;
+  calcGPS: CallableFunction;
 }) {
   return (
     <TouchableOpacity
       style={styles.upgradeBox}
       onPress={() => {
-        buyOne(bones, smartMiners);
+        if (buyOne(bones, smartMiners)) calcGPS();
       }}
     >
       <Text>Smarter Miners: {smartMiners.getLevel()}</Text>

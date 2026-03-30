@@ -11,17 +11,19 @@ function Miners({
   pickaxe,
   smartMiners,
   bones,
+  calcGPS,
 }: {
   miners: Upgrade;
   pickaxe: Upgrade;
   smartMiners: Upgrade;
-  bones: number;
+  bones: React.RefObject<number>;
+  calcGPS: CallableFunction;
 }) {
   return (
     <TouchableOpacity
       style={styles.upgradeBox}
       onPress={() => {
-        buyOne(bones, miners);
+        if (buyOne(bones, miners)) calcGPS();
       }}
     >
       <Text>Skeleton Miners: {miners.getLevel()}</Text>

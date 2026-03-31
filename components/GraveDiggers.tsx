@@ -2,7 +2,6 @@ import { Image, Text, TouchableOpacity } from "react-native";
 import React from "react";
 import { styles } from "../styles/style";
 import Upgrade from "../classes/Upgrade";
-import { buyOne } from "../functions/Buy";
 import { simplifyNumbers } from "../functions/SimplifyNumber";
 
 function GraveDiggers({
@@ -20,7 +19,7 @@ function GraveDiggers({
     <TouchableOpacity
       style={styles.upgradeBox}
       onPress={() => {
-        if (buyOne(gold, graveDigger)) calcBPS();
+        if (graveDigger.buy(gold)) calcBPS();
       }}
     >
       <Text>Grave Diggers: {graveDigger.getLevel()}</Text>

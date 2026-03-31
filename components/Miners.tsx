@@ -3,7 +3,6 @@ import React from "react";
 import { styles } from "../styles/style";
 import Upgrade from "../classes/Upgrade";
 import values from "../values/Values";
-import { buyOne } from "../functions/Buy";
 import { simplifyNumbers } from "../functions/SimplifyNumber";
 
 function Miners({
@@ -23,7 +22,7 @@ function Miners({
     <TouchableOpacity
       style={styles.upgradeBox}
       onPress={() => {
-        if (buyOne(bones, miners)) calcGPS();
+        if (miners.buy(bones)) calcGPS();
       }}
     >
       <Text>Skeleton Miners: {miners.getLevel()}</Text>

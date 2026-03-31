@@ -3,7 +3,6 @@ import React from "react";
 import { styles } from "../styles/style";
 import Upgrade from "../classes/Upgrade";
 import values from "../values/Values";
-import { buyOne } from "../functions/Buy";
 import { simplifyNumbers } from "../functions/SimplifyNumber";
 
 function Pickaxes({
@@ -19,7 +18,7 @@ function Pickaxes({
     <TouchableOpacity
       style={styles.upgradeBox}
       onPress={() => {
-        if (buyOne(gold, pickaxes)) calcGPS();
+        if (pickaxes.buy(gold)) calcGPS();
       }}
     >
       <Text>Pickaxe Level: {pickaxes.getLevel()}</Text>

@@ -2,8 +2,7 @@ import { Image, Text, TouchableOpacity } from "react-native";
 import React from "react";
 import { styles } from "../styles/style";
 import Upgrade from "../classes/Upgrade";
-import Values from "../values/Values";
-import { buyOne } from "../functions/Buy";
+import values from "../values/Values";
 import { simplifyNumbers } from "../functions/SimplifyNumber";
 
 function SmartMiners({
@@ -19,7 +18,7 @@ function SmartMiners({
     <TouchableOpacity
       style={styles.upgradeBox}
       onPress={() => {
-        if (buyOne(bones, smartMiners)) calcGPS();
+        if (smartMiners.buy(bones)) calcGPS();
       }}
     >
       <Text>Smarter Miners: {smartMiners.getLevel()}</Text>
@@ -32,7 +31,7 @@ function SmartMiners({
       </Text>
       <Text style={styles.MinersText}>
         Bonus production per miner:{" "}
-        {smartMiners.getLevel() * Values.SMART_MINER_BONUS * 100}%
+        {smartMiners.getLevel() * values.SMART_MINER_BONUS * 100}%
       </Text>
     </TouchableOpacity>
   );

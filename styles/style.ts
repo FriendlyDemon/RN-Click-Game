@@ -24,7 +24,7 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderTopLeftRadius: 15,
     borderBottomLeftRadius: 15,
-    backgroundColor:"#666666"
+    backgroundColor: "#666666",
   },
   upgradeScrollParent: {
     borderTopLeftRadius: 15,

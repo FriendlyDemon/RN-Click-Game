@@ -2,7 +2,6 @@ import { Image, Text, TouchableOpacity } from "react-native";
 import React from "react";
 import { styles } from "../styles/style";
 import Upgrade from "../classes/Upgrade";
-import { buyOne } from "../functions/Buy";
 import { simplifyNumbers } from "../functions/SimplifyNumber";
 
 function Shovel({
@@ -18,7 +17,7 @@ function Shovel({
     <TouchableOpacity
       style={styles.upgradeBox}
       onPress={() => {
-        if (buyOne(gold, shovel)) calcClick();
+        if (shovel.buy(gold)) calcClick();
       }}
     >
       <Text>Shovel Level: {shovel.getLevel()}</Text>

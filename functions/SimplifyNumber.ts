@@ -8,7 +8,7 @@ export function simplifyNumbers(number: number): string {
 
     if (number > 1000) {
       string = [
-        string.slice(0,string.length - 3),
+        string.slice(0, string.length - 3),
         " ",
         string.slice(string.length - 3),
       ].join("");

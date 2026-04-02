@@ -5,16 +5,16 @@ import Upgrade from "../classes/Upgrade";
 import values from "../values/Values";
 import { simplifyNumbers } from "../functions/SimplifyNumber";
 
-function Miners({
-  miners,
-  pickaxe,
-  smartMiners,
+function Farmers({
+  farmers,
+  scythe,
+  horses,
   bones,
   calcGPS,
 }: {
-  miners: Upgrade;
-  pickaxe: Upgrade;
-  smartMiners: Upgrade;
+  farmers: Upgrade;
+  scythe: Upgrade;
+  horses: Upgrade;
   bones: React.RefObject<number>;
   calcGPS: CallableFunction;
 }) {
@@ -22,29 +22,31 @@ function Miners({
     <TouchableOpacity
       style={styles.upgradeBox}
       onPress={() => {
-        if (miners.buy(bones)) calcGPS();
+        if (farmers.buy(bones)) calcGPS();
       }}
     >
-      <Text>Skeleton Miners: {miners.getLevel()}</Text>
-      <Text style={styles.MinersText}>
-        Cost: {simplifyNumbers(miners.getCurrentCost())}{" "}
+      <Text style={styles.UpgradeNameText}>
+        Skeleton Farmers: {farmers.getLevel()}
+      </Text>
+      <Text style={styles.UpgradeText}>
+        Cost: {simplifyNumbers(farmers.getCurrentCost())}{" "}
         <Image
           style={styles.icons}
           source={require("../assets/bone_outline.png")}
         />
       </Text>
-      <Text style={styles.MinersText}>
+      <Text style={styles.UpgradeText}>
         <Image
           style={styles.icons}
           source={require("../assets/gold_outline.png")}
         />{" "}
         :{" "}
         {simplifyNumbers(
-          miners.getLevel() *
-            (1 + pickaxe.getLevel() * values.PICKAXE_MINERS_INCREASE) *
+          farmers.getLevel() *
+            (1 + scythe.getLevel() * values.SCYTHE_FARMERS_INCREASE) *
             Math.pow(
-              1 + smartMiners.getLevel() * values.SMART_MINER_BONUS,
-              miners.getLevel(),
+              1 + horses.getLevel() * values.HORSE_BONUS,
+              farmers.getLevel(),
             ),
         )}
         /s
@@ -53,4 +55,4 @@ function Miners({
   );
 }
 
-export default Miners;
+export default Farmers;

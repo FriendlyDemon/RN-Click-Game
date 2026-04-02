@@ -7,11 +7,11 @@ import Upgrade from "./classes/Upgrade";
 import Save from "./classes/Save";
 import { styles } from "./styles/style";
 import Shovel from "./components/Shovel";
-import Miners from "./components/Miners";
-import Pickaxes from "./components/Pickaxes";
+import Farmers from "./components/Farmers";
+import Scythes from "./components/Scythes";
 import values from "./values/Values";
 import SmoothNumber from "./components/AnimatedValue";
-import SmartMiners from "./components/SmartMiners";
+import Horses from "./components/Horses";
 import GraveDiggers from "./components/GraveDiggers";
 import { simplifyNumbers } from "./functions/SimplifyNumber";
 import { Ionicons } from "@expo/vector-icons";
@@ -32,14 +32,14 @@ export default function App() {
   const shovel = useRef<Upgrade>(
     new Upgrade(values.SHOVELS_COST, values.SHOVELS_COST_INCREASE),
   );
-  const miners = useRef<Upgrade>(
-    new Upgrade(values.MINERS_COST, values.MINERS_COST_INCREASE),
+  const farmers = useRef<Upgrade>(
+    new Upgrade(values.FARMERS_COST, values.FARMERS_COST_INCREASE),
   );
-  const pickaxes = useRef<Upgrade>(
-    new Upgrade(values.PICKAXE_COST, values.PICKAXE_COST_INCREASE),
+  const scythes = useRef<Upgrade>(
+    new Upgrade(values.SCYTHE_COST, values.SCYTHE_COST_INCREASE),
   );
-  const smartMiners = useRef<Upgrade>(
-    new Upgrade(values.SMART_MINER_COST, values.SMART_MINER_COST_INCREASE),
+  const horses = useRef<Upgrade>(
+    new Upgrade(values.HORSE_COST, values.HORSE_COST_INCREASE),
   );
   const graveDiggers = useRef<Upgrade>(
     new Upgrade(values.GRAVE_DIGGER_COST, values.GRAVE_DIGGER_COST_INCREASE),
@@ -53,11 +53,11 @@ export default function App() {
   function calcGPS() {
     GPS.current =
       Math.floor(
-        miners.current.getLevel() *
-          (1 + pickaxes.current.getLevel() * values.PICKAXE_MINERS_INCREASE) *
+        farmers.current.getLevel() *
+          (1 + scythes.current.getLevel() * values.SCYTHE_FARMERS_INCREASE) *
           Math.pow(
-            1 + smartMiners.current.getLevel() * values.SMART_MINER_BONUS,
-            miners.current.getLevel(),
+            1 + horses.current.getLevel() * values.HORSE_BONUS,
+            farmers.current.getLevel(),
           ) *
           100,
       ) / 100;
@@ -97,9 +97,9 @@ export default function App() {
       lastTime.current = save.lastTime;
       saveInterval.current = save.saveInterval;
       shovel.current.setLevel(save.shovel);
-      miners.current.setLevel(save.miners);
-      pickaxes.current.setLevel(save.pickaxes);
-      smartMiners.current.setLevel(save.smartMiners);
+      farmers.current.setLevel(save.farmers);
+      scythes.current.setLevel(save.scythes);
+      horses.current.setLevel(save.horses);
       graveDiggers.current.setLevel(save.graveDiggers);
       calcClick();
       calcGPS();
@@ -115,9 +115,9 @@ export default function App() {
         lastTime.current,
         saveInterval.current,
         shovel.current.getLevel(),
-        miners.current.getLevel(),
-        pickaxes.current.getLevel(),
-        smartMiners.current.getLevel(),
+        farmers.current.getLevel(),
+        scythes.current.getLevel(),
+        horses.current.getLevel(),
         graveDiggers.current.getLevel(),
       ),
     );
@@ -130,9 +130,9 @@ export default function App() {
     gold.current = 0;
     bones.current = 0;
     shovel.current.setLevel(0);
-    miners.current.setLevel(0);
-    pickaxes.current.setLevel(0);
-    smartMiners.current.setLevel(0);
+    farmers.current.setLevel(0);
+    scythes.current.setLevel(0);
+    horses.current.setLevel(0);
     graveDiggers.current.setLevel(0);
     calcClick();
     calcGPS();
@@ -239,10 +239,10 @@ export default function App() {
               contentContainerStyle={styles.upgradeScroll}
               style={styles.upgradeScrollParent}
             >
-              <Miners
-                miners={miners.current}
-                pickaxe={pickaxes.current}
-                smartMiners={smartMiners.current}
+              <Farmers
+                farmers={farmers.current}
+                scythe={scythes.current}
+                horses={horses.current}
                 bones={bones}
                 calcGPS={calcGPS}
               />
@@ -257,13 +257,9 @@ export default function App() {
                 gold={gold}
                 calcBPS={calcBPS}
               />
-              <SmartMiners
-                smartMiners={smartMiners.current}
-                bones={bones}
-                calcGPS={calcGPS}
-              />
-              <Pickaxes
-                pickaxes={pickaxes.current}
+              <Horses horses={horses.current} bones={bones} calcGPS={calcGPS} />
+              <Scythes
+                scythes={scythes.current}
                 gold={gold}
                 calcGPS={calcGPS}
               />

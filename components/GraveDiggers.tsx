@@ -22,15 +22,17 @@ function GraveDiggers({
         if (graveDigger.buy(gold)) calcBPS();
       }}
     >
-      <Text>Grave Diggers: {graveDigger.getLevel()}</Text>
-      <Text style={styles.MinersText}>
+      <Text style={styles.UpgradeNameText}>
+        Grave Diggers: {graveDigger.getLevel()}
+      </Text>
+      <Text style={styles.UpgradeText}>
         Cost: {simplifyNumbers(graveDigger.getCurrentCost())}{" "}
         <Image
           style={styles.icons}
           source={require("../assets/gold_outline.png")}
         />
       </Text>
-      <Text style={styles.MinersText}>
+      <Text style={styles.UpgradeText}>
         <Image
           style={styles.icons}
           source={require("../assets/bone_outline.png")}

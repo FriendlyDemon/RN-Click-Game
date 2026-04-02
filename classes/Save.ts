@@ -4,9 +4,9 @@ export default class Save {
   lastTime: number;
   saveInterval: number;
   shovel: number;
-  miners: number;
-  pickaxes: number;
-  smartMiners: number;
+  farmers: number;
+  scythes: number;
+  horses: number;
   graveDiggers: number;
 
   constructor(
@@ -15,9 +15,9 @@ export default class Save {
     lastTime: number,
     saveInterval: number,
     shovel: number,
-    miners: number,
-    pickaxes: number,
-    smartMiners: number,
+    farmers: number,
+    scythes: number,
+    horses: number,
     graveDiggers: number,
   ) {
     this.bones = bones;
@@ -25,9 +25,9 @@ export default class Save {
     this.lastTime = lastTime;
     this.saveInterval = saveInterval;
     this.shovel = shovel;
-    this.miners = miners;
-    this.pickaxes = pickaxes;
-    this.smartMiners = smartMiners;
+    this.farmers = farmers;
+    this.scythes = scythes;
+    this.horses = horses;
     this.graveDiggers = graveDiggers;
   }
 }

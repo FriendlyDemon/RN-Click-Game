@@ -5,12 +5,12 @@ import Upgrade from "../classes/Upgrade";
 import values from "../values/Values";
 import { simplifyNumbers } from "../functions/SimplifyNumber";
 
-function Pickaxes({
-  pickaxes,
+function Scythes({
+  scythes,
   gold,
   calcGPS,
 }: {
-  pickaxes: Upgrade;
+  scythes: Upgrade;
   gold: React.RefObject<number>;
   calcGPS: CallableFunction;
 }) {
@@ -18,27 +18,29 @@ function Pickaxes({
     <TouchableOpacity
       style={styles.upgradeBox}
       onPress={() => {
-        if (pickaxes.buy(gold)) calcGPS();
+        if (scythes.buy(gold)) calcGPS();
       }}
     >
-      <Text>Pickaxe Level: {pickaxes.getLevel()}</Text>
-      <Text style={styles.MinersText}>
-        Cost: {simplifyNumbers(pickaxes.getCurrentCost())}{" "}
+      <Text style={styles.UpgradeNameText}>
+        Scythe Level: {scythes.getLevel()}
+      </Text>
+      <Text style={styles.UpgradeText}>
+        Cost: {simplifyNumbers(scythes.getCurrentCost())}{" "}
         <Image
           style={styles.icons}
           source={require("../assets/gold_outline.png")}
         />
       </Text>
-      <Text style={styles.MinersText}>
+      <Text style={styles.UpgradeText}>
         Base{" "}
         <Image
           style={styles.icons}
           source={require("../assets/gold_outline.png")}
         />{" "}
-        per miner: {1 + pickaxes.getLevel() * values.PICKAXE_MINERS_INCREASE}
+        per farmer: {1 + scythes.getLevel() * values.SCYTHE_FARMERS_INCREASE}
       </Text>
     </TouchableOpacity>
   );
 }
 
-export default Pickaxes;
+export default Scythes;

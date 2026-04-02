@@ -5,12 +5,12 @@ import Upgrade from "../classes/Upgrade";
 import values from "../values/Values";
 import { simplifyNumbers } from "../functions/SimplifyNumber";
 
-function SmartMiners({
-  smartMiners,
+function Horses({
+  horses,
   bones,
   calcGPS,
 }: {
-  smartMiners: Upgrade;
+  horses: Upgrade;
   bones: React.RefObject<number>;
   calcGPS: CallableFunction;
 }) {
@@ -18,23 +18,23 @@ function SmartMiners({
     <TouchableOpacity
       style={styles.upgradeBox}
       onPress={() => {
-        if (smartMiners.buy(bones)) calcGPS();
+        if (horses.buy(bones)) calcGPS();
       }}
     >
-      <Text>Smarter Miners: {smartMiners.getLevel()}</Text>
-      <Text style={styles.MinersText}>
-        Cost: {simplifyNumbers(smartMiners.getCurrentCost())}{" "}
+      <Text style={styles.UpgradeNameText}>Horses: {horses.getLevel()}</Text>
+      <Text style={styles.UpgradeText}>
+        Cost: {simplifyNumbers(horses.getCurrentCost())}{" "}
         <Image
           style={styles.icons}
           source={require("../assets/bone_outline.png")}
         />
       </Text>
-      <Text style={styles.MinersText}>
-        Bonus production per miner:{" "}
-        {smartMiners.getLevel() * values.SMART_MINER_BONUS * 100}%
+      <Text style={styles.UpgradeText}>
+        Bonus production per farmer:{" "}
+        {horses.getLevel() * values.HORSE_BONUS * 100}%
       </Text>
     </TouchableOpacity>
   );
 }
 
-export default SmartMiners;
+export default Horses;

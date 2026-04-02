@@ -50,7 +50,7 @@ export const styles = StyleSheet.create({
     backgroundColor: "#dddddd",
   },
   counterText: {},
-  ShovelText: {},
-  MinersText: {},
+  UpgradeText: {},
+  UpgradeNameText: {},
   icons: { height: 12, width: 12, resizeMode: "contain" },
 });

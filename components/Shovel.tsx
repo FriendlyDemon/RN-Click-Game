@@ -20,15 +20,17 @@ function Shovel({
         if (shovel.buy(gold)) calcClick();
       }}
     >
-      <Text>Shovel Level: {shovel.getLevel()}</Text>
-      <Text style={styles.ShovelText}>
+      <Text style={styles.UpgradeNameText}>
+        Shovel Level: {shovel.getLevel()}
+      </Text>
+      <Text style={styles.UpgradeText}>
         Cost: {simplifyNumbers(shovel.getCurrentCost())}{" "}
         <Image
           style={styles.icons}
           source={require("../assets/gold_outline.png")}
         />
       </Text>
-      <Text style={styles.ShovelText}>
+      <Text style={styles.UpgradeText}>
         <Image
           style={styles.icons}
           source={require("../assets/bone_outline.png")}

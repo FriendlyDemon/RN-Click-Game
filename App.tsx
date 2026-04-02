@@ -1,7 +1,14 @@
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useRef, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import {
+  Alert,
+  Image,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import Upgrade from "./classes/Upgrade";
 import Save from "./classes/Save";
@@ -88,23 +95,41 @@ export default function App() {
 
   async function load() {
     timePass.current = false;
-    let savedUpgrades = await AsyncStorage.getItem("@save");
-    if (savedUpgrades) {
-      let save: Save = JSON.parse(savedUpgrades);
+    try {
+      let savedUpgrades = await AsyncStorage.getItem("@save");
+      if (savedUpgrades) {
+        let save: Save = JSON.parse(savedUpgrades);
 
-      gold.current = save.gold;
-      bones.current = save.bones;
-      lastTime.current = save.lastTime;
-      saveInterval.current = save.saveInterval;
-      shovel.current.setLevel(save.shovel);
-      farmers.current.setLevel(save.farmers);
-      scythes.current.setLevel(save.scythes);
-      horses.current.setLevel(save.horses);
-      graveDiggers.current.setLevel(save.graveDiggers);
-      calcClick();
-      calcGPS();
+        gold.current = save.gold;
+        bones.current = save.bones;
+        lastTime.current = save.lastTime;
+        saveInterval.current = save.saveInterval;
+        shovel.current.setLevel(save.shovel);
+        farmers.current.setLevel(save.farmers);
+        scythes.current.setLevel(save.scythes);
+        horses.current.setLevel(save.horses);
+        graveDiggers.current.setLevel(save.graveDiggers);
+        calcClick();
+        calcGPS();
+
+        timePass.current = true;
+      }
+    } catch (error) {
+      Alert.alert(
+        "Error loading save",
+        "there was an error loading a save,choose what you want to do:",
+        [
+          { text: "delete old save", onPress: deleteSave, isPreferred: true },
+          {
+            text: "load from file",
+            onPress: () => {
+              Alert.alert("sorry", "not implemented yet");
+            },
+          },
+          { text: "do nothing", onPress: () => {} },
+        ],
+      );
     }
-    timePass.current = true;
   }
 
   async function save() {

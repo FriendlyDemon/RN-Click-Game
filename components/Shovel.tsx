@@ -16,6 +16,7 @@ function Shovel({
   return (
     <TouchableOpacity
       style={styles.upgradeBox}
+      activeOpacity={0.7}
       onPress={() => {
         if (shovel.buy(gold)) calcClick();
       }}

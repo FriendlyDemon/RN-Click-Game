@@ -17,6 +17,7 @@ function Horses({
   return (
     <TouchableOpacity
       style={styles.upgradeBox}
+      activeOpacity={0.7}
       onPress={() => {
         if (horses.buy(bones)) calcGPS();
       }}

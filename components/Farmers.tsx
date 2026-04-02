@@ -21,6 +21,7 @@ function Farmers({
   return (
     <TouchableOpacity
       style={styles.upgradeBox}
+      activeOpacity={0.7}
       onPress={() => {
         if (farmers.buy(bones)) calcGPS();
       }}

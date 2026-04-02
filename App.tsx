@@ -27,9 +27,11 @@ export default function App() {
   const [displayResources, setDisplayResources] = useState<{
     gold: number;
     bones: number;
+    instant: boolean;
   }>({
     gold: 0,
     bones: 0,
+    instant: false,
   });
   const bones = useRef<number>(0);
   const gold = useRef<number>(0);
@@ -90,6 +92,7 @@ export default function App() {
     setDisplayResources((prev) => ({
       ...prev,
       bones: bones.current,
+      instant: true,
     }));
   }
 
@@ -171,6 +174,7 @@ export default function App() {
       setDisplayResources({
         gold: gold.current,
         bones: bones.current,
+        instant: false,
       });
     }
   }
@@ -187,6 +191,7 @@ export default function App() {
       setDisplayResources({
         gold: gold.current,
         bones: bones.current,
+        instant: false,
       });
       uiTimer.current = 0;
     }
@@ -225,39 +230,55 @@ export default function App() {
       <SafeAreaView style={styles.container}>
         <View style={styles.incrementalContainer}>
           <View style={styles.clickContainer}>
-            <TouchableOpacity style={styles.clicker} onPress={click}>
+            <TouchableOpacity
+              style={styles.clicker}
+              onPress={click}
+              activeOpacity={0.7}
+            >
               <Image
                 style={styles.grave}
                 source={require("./assets/grave.png")}
               />
             </TouchableOpacity>
-            <Text style={styles.counterText}>
-              <Image
-                style={styles.icons}
-                source={require("./assets/bone_outline.png")}
-              />{" "}
-              : <SmoothNumber value={displayResources.bones} />{" "}
-              {BPS.current ? (
-                <Text style={styles.counterText}>
-                  ({simplifyNumbers(BPS.current)}/s)
-                </Text>
-              ) : null}
-            </Text>
-
-            {gold.current || GPS.current ? (
+            <View>
               <Text style={styles.counterText}>
                 <Image
                   style={styles.icons}
-                  source={require("./assets/gold_outline.png")}
+                  source={require("./assets/bone_outline.png")}
                 />{" "}
-                : <SmoothNumber value={displayResources.gold} />{" "}
-                {GPS.current ? (
+                :{" "}
+                <SmoothNumber
+                  style={styles.counterText}
+                  value={displayResources.bones}
+                  instant={displayResources.instant}
+                />{" "}
+                {BPS.current ? (
                   <Text style={styles.counterText}>
-                    ({simplifyNumbers(GPS.current)}/s)
+                    ({simplifyNumbers(BPS.current)}/s)
                   </Text>
                 ) : null}
               </Text>
-            ) : null}
+
+              {gold.current || GPS.current ? (
+                <Text style={styles.counterText}>
+                  <Image
+                    style={styles.icons}
+                    source={require("./assets/gold_outline.png")}
+                  />{" "}
+                  :{" "}
+                  <SmoothNumber
+                    style={styles.counterText}
+                    value={displayResources.gold}
+                    instant={displayResources.instant}
+                  />{" "}
+                  {GPS.current ? (
+                    <Text style={styles.counterText}>
+                      ({simplifyNumbers(GPS.current)}/s)
+                    </Text>
+                  ) : null}
+                </Text>
+              ) : null}
+            </View>
           </View>
           <View style={styles.upgradesContainer}>
             <ScrollView
@@ -291,7 +312,7 @@ export default function App() {
             </ScrollView>
           </View>
         </View>
-        <View>
+        <View style={styles.bottom}>
           <TouchableOpacity
             onPress={() => {
               deleteSave();

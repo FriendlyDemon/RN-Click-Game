@@ -18,6 +18,7 @@ function GraveDiggers({
   return (
     <TouchableOpacity
       style={styles.upgradeBox}
+      activeOpacity={0.7}
       onPress={() => {
         if (graveDigger.buy(gold)) calcBPS();
       }}

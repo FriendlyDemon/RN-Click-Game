@@ -6,7 +6,7 @@ export function simplifyNumbers(number: number): string {
   }
 
   if (number < 100) {
-    return (Math.floor(number * 100) / 100).toString();
+    return (Math.floor(number * 100) / 100).toFixed(2).toString();
   }
 
   const int = Math.floor(number);

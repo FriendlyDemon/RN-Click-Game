@@ -54,10 +54,12 @@ export default function App() {
     new Upgrade(values.GRAVE_DIGGER_COST, values.GRAVE_DIGGER_COST_INCREASE),
   );
   const timePass = useRef<boolean>(true);
+  const [pauseText, setPauseText] = useState<boolean>(true);
   const lastTime = useRef<number>(Date.now());
   const uiTimer = useRef<number>(0);
   const saveTimer = useRef<number>(0);
   const saveInterval = useRef<number>(15);
+  const [showConfig, setShowconfig] = useState<boolean>(false);
 
   function calcGPS() {
     GPS.current =
@@ -164,19 +166,19 @@ export default function App() {
     graveDiggers.current.setLevel(0);
     calcClick();
     calcGPS();
+    setDisplayResources({ bones: 0, gold: 0, instant: true });
 
     await AsyncStorage.removeItem("@save");
     timePass.current = true;
   }
 
   function updateResources() {
-    if (timePass.current) {
-      setDisplayResources({
-        gold: gold.current,
-        bones: bones.current,
-        instant: false,
-      });
-    }
+    if (!timePass.current) return;
+    setDisplayResources({
+      gold: gold.current,
+      bones: bones.current,
+      instant: false,
+    });
   }
 
   function tick(deltaTime: number) {
@@ -315,21 +317,30 @@ export default function App() {
         <View style={styles.bottom}>
           <TouchableOpacity
             onPress={() => {
-              deleteSave();
+              setShowconfig((prev) => !prev);
             }}
           >
-            <Text>Delete Save</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              timePass.current = !timePass.current;
-            }}
-          >
-            <Text>{timePass.current ? "pause" : "resume"}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => {}}>
             <Ionicons name="settings-outline" size={40} color="#cccccc" />
           </TouchableOpacity>
+          {showConfig ? (
+            <view>
+              <TouchableOpacity
+                onPress={() => {
+                  deleteSave();
+                }}
+              >
+                <Text>Delete Save</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  timePass.current = !timePass.current;
+                  setPauseText(timePass.current);
+                }}
+              >
+                <Text>{pauseText ? "pause" : "resume"}</Text>
+              </TouchableOpacity>
+            </view>
+          ) : null}
         </View>
         <StatusBar style="auto" />
       </SafeAreaView>

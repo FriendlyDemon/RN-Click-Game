@@ -71,4 +71,12 @@ export const styles = StyleSheet.create({
   UpgradeText: { color: colors.text },
   icons: { height: 12, width: 12, resizeMode: "contain" },
   bottom: { flex: 1, backgroundColor: "#dddddd" },
+  optionsCog: { fontSize: 40, width: 40, color: "grey" },
+  options: {
+    flexDirection: "column",
+    width: 100,
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: "black",
+  },
 });

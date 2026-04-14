@@ -315,31 +315,25 @@ export default function App() {
           </View>
         </View>
         <View style={styles.bottom}>
-          <TouchableOpacity
+          <Ionicons
+            style={styles.optionsCog}
+            name="settings-outline"
             onPress={() => {
               setShowconfig((prev) => !prev);
             }}
-          >
-            <Ionicons name="settings-outline" size={40} color="#cccccc" />
-          </TouchableOpacity>
+          />
           {showConfig ? (
-            <view>
-              <TouchableOpacity
-                onPress={() => {
-                  deleteSave();
-                }}
-              >
-                <Text>Delete Save</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
+            <View style={styles.options}>
+              <Text
                 onPress={() => {
                   timePass.current = !timePass.current;
                   setPauseText(timePass.current);
                 }}
               >
-                <Text>{pauseText ? "pause" : "resume"}</Text>
-              </TouchableOpacity>
-            </view>
+                {pauseText ? "Pause" : "Resume"}
+              </Text>
+              <Text onPress={deleteSave}>Delete Save</Text>
+            </View>
           ) : null}
         </View>
         <StatusBar style="auto" />

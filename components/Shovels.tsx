@@ -1,5 +1,5 @@
 import { Image, Text, TouchableOpacity } from "react-native";
-import React, { useEffect, useRef } from "react";
+import React, { useMemo } from "react";
 import { styles } from "../styles/style";
 import Upgrade from "../classes/Upgrade";
 import { simplifyNumbers } from "../functions/SimplifyNumber";
@@ -12,10 +12,11 @@ function Shovels({
   shovel: Upgrade;
   calcClick: CallableFunction;
 }) {
-  const worth = useRef<number>(shovel.getLevel() + 1);
-  useEffect(() => {
-    worth.current = shovel.getLevel() + 1;
-  }, [shovel.getLevel()]);
+  const worth = useMemo<number>(
+    () => shovel.getLevel() + 1,
+    [shovel.getLevel()],
+  );
+
   return (
     <TouchableOpacity
       style={styles.upgradeBox}
@@ -33,7 +34,7 @@ function Shovels({
       </Text>
       <Text style={styles.UpgradeText}>
         <Image style={styles.icons} source={images.bone_outline} /> per Click:{" "}
-        {worth.current}
+        {worth}
       </Text>
     </TouchableOpacity>
   );

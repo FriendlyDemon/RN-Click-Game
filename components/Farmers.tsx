@@ -1,5 +1,5 @@
 import { Image, Text, TouchableOpacity } from "react-native";
-import React, { useEffect, useRef } from "react";
+import React, { useMemo } from "react";
 import { styles } from "../styles/style";
 import Upgrade from "../classes/Upgrade";
 import values from "../values/Values";
@@ -18,27 +18,19 @@ function Farmers({
   horses: Upgrade;
   calcGPS: CallableFunction;
 }) {
-  const worth = useRef<string>(
-    simplifyNumbers(
-      farmers.getLevel() *
-        (1 + scythe.getLevel() * values.SCYTHE_FARMERS_INCREASE) *
-        Math.pow(
-          1 + horses.getLevel() * values.HORSE_BONUS,
-          farmers.getLevel(),
-        ),
-    ),
+  const worth = useMemo<string>(
+    () =>
+      simplifyNumbers(
+        farmers.getLevel() *
+          (1 + scythe.getLevel() * values.SCYTHE_FARMERS_INCREASE) *
+          Math.pow(
+            1 + horses.getLevel() * values.HORSE_BONUS,
+            farmers.getLevel(),
+          ),
+      ),
+    [farmers.getLevel(), scythe.getLevel(), horses.getLevel()],
   );
 
-  useEffect(() => {
-    worth.current = simplifyNumbers(
-      farmers.getLevel() *
-        (1 + scythe.getLevel() * values.SCYTHE_FARMERS_INCREASE) *
-        Math.pow(
-          1 + horses.getLevel() * values.HORSE_BONUS,
-          farmers.getLevel(),
-        ),
-    );
-  }, [farmers.getLevel(), scythe.getLevel(), horses.getLevel()]);
   return (
     <TouchableOpacity
       style={styles.upgradeBox}
@@ -55,8 +47,7 @@ function Farmers({
         <Image style={styles.icons} source={images.bone_outline} />
       </Text>
       <Text style={styles.UpgradeText}>
-        <Image style={styles.icons} source={images.gold_outline} /> :{" "}
-        {worth.current}
+        <Image style={styles.icons} source={images.gold_outline} /> : {worth}
         /s
       </Text>
     </TouchableOpacity>

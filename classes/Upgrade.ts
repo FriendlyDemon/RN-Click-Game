@@ -2,6 +2,7 @@ export default class Upgrade {
   private level: number = 0;
   private cost: number;
   private costMult: number;
+  private resource: React.RefObject<number>;
 
   getCurrentCost(numberToBuy?: number): number {
     if (numberToBuy) {
@@ -16,9 +17,9 @@ export default class Upgrade {
     return Math.round(this.cost * Math.pow(this.costMult, this.level));
   }
 
-  buy(resource: React.RefObject<number>, numberToBuy?: number): boolean {
-    if (resource.current >= this.getCurrentCost(numberToBuy)) {
-      resource.current -= numberToBuy
+  buy(numberToBuy?: number): boolean {
+    if (this.resource.current >= this.getCurrentCost(numberToBuy)) {
+      this.resource.current -= numberToBuy
         ? this.getCurrentCost(numberToBuy)
         : this.getCurrentCost();
       this.level += numberToBuy || 1;
@@ -35,8 +36,13 @@ export default class Upgrade {
     return this.level;
   }
 
-  constructor(cost: number, costMult: number) {
+  constructor(
+    cost: number,
+    costMult: number,
+    resource: React.RefObject<number>,
+  ) {
     this.cost = cost;
     this.costMult = costMult;
+    this.resource = resource;
   }
 }

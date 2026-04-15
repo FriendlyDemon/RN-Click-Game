@@ -4,14 +4,13 @@ import { styles } from "../styles/style";
 import Upgrade from "../classes/Upgrade";
 import values from "../values/Values";
 import { simplifyNumbers } from "../functions/SimplifyNumber";
+import { images } from "../assets/images";
 
 function Scythes({
   scythes,
-  gold,
   calcGPS,
 }: {
   scythes: Upgrade;
-  gold: React.RefObject<number>;
   calcGPS: CallableFunction;
 }) {
   return (
@@ -19,7 +18,7 @@ function Scythes({
       style={styles.upgradeBox}
       activeOpacity={0.7}
       onPress={() => {
-        if (scythes.buy(gold)) calcGPS();
+        if (scythes.buy()) calcGPS();
       }}
     >
       <Text style={styles.UpgradeNameText}>
@@ -27,18 +26,11 @@ function Scythes({
       </Text>
       <Text style={styles.UpgradeText}>
         Cost: {simplifyNumbers(scythes.getCurrentCost())}{" "}
-        <Image
-          style={styles.icons}
-          source={require("../assets/gold_outline.png")}
-        />
+        <Image style={styles.icons} source={images.gold_outline} />
       </Text>
       <Text style={styles.UpgradeText}>
-        Base{" "}
-        <Image
-          style={styles.icons}
-          source={require("../assets/gold_outline.png")}
-        />{" "}
-        per farmer: {1 + scythes.getLevel() * values.SCYTHE_FARMERS_INCREASE}
+        Base <Image style={styles.icons} source={images.gold_outline} /> per
+        farmer: {1 + scythes.getLevel() * values.SCYTHE_FARMERS_INCREASE}
       </Text>
     </TouchableOpacity>
   );

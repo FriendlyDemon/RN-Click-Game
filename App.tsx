@@ -10,10 +10,11 @@ import {
   View,
 } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import Upgrade from "./classes/Upgrade";
+import Farmer from "./classes/Upgrades/Farmer";
+import Shovel from "./classes/Upgrades/Shovel";
 import Save from "./classes/Save";
 import { styles } from "./styles/style";
-import Shovel from "./components/Shovel";
+import Shovels from "./components/Shovels";
 import Farmers from "./components/Farmers";
 import Scythes from "./components/Scythes";
 import values from "./values/Values";
@@ -22,6 +23,10 @@ import Horses from "./components/Horses";
 import GraveDiggers from "./components/GraveDiggers";
 import { simplifyNumbers } from "./functions/SimplifyNumber";
 import { Ionicons } from "@expo/vector-icons";
+import GraveDigger from "./classes/Upgrades/GraveDigger";
+import Horse from "./classes/Upgrades/Horse";
+import Scythe from "./classes/Upgrades/Scythe";
+import { images } from "./assets/images";
 
 export default function App() {
   const [displayResources, setDisplayResources] = useState<{
@@ -38,21 +43,11 @@ export default function App() {
   const GPS = useRef<number>(0);
   const BPS = useRef<number>(0);
   const clickIncrement = useRef<number>(1);
-  const shovel = useRef<Upgrade>(
-    new Upgrade(values.SHOVELS_COST, values.SHOVELS_COST_INCREASE),
-  );
-  const farmers = useRef<Upgrade>(
-    new Upgrade(values.FARMERS_COST, values.FARMERS_COST_INCREASE),
-  );
-  const scythes = useRef<Upgrade>(
-    new Upgrade(values.SCYTHE_COST, values.SCYTHE_COST_INCREASE),
-  );
-  const horses = useRef<Upgrade>(
-    new Upgrade(values.HORSE_COST, values.HORSE_COST_INCREASE),
-  );
-  const graveDiggers = useRef<Upgrade>(
-    new Upgrade(values.GRAVE_DIGGER_COST, values.GRAVE_DIGGER_COST_INCREASE),
-  );
+  const farmer = useRef<Farmer>(new Farmer(bones));
+  const shovel = useRef<Shovel>(new Shovel(gold));
+  const scythe = useRef<Scythe>(new Scythe(gold));
+  const horse = useRef<Horse>(new Horse(bones));
+  const graveDigger = useRef<GraveDigger>(new GraveDigger(gold));
   const timePass = useRef<boolean>(true);
   const [pauseText, setPauseText] = useState<boolean>(true);
   const lastTime = useRef<number>(Date.now());
@@ -64,11 +59,11 @@ export default function App() {
   function calcGPS() {
     GPS.current =
       Math.floor(
-        farmers.current.getLevel() *
-          (1 + scythes.current.getLevel() * values.SCYTHE_FARMERS_INCREASE) *
+        farmer.current.getLevel() *
+          (1 + scythe.current.getLevel() * values.SCYTHE_FARMERS_INCREASE) *
           Math.pow(
-            1 + horses.current.getLevel() * values.HORSE_BONUS,
-            farmers.current.getLevel(),
+            1 + horse.current.getLevel() * values.HORSE_BONUS,
+            farmer.current.getLevel(),
           ) *
           100,
       ) / 100;
@@ -78,7 +73,7 @@ export default function App() {
   function calcBPS() {
     BPS.current =
       Math.floor(
-        ((clickIncrement.current * graveDiggers.current.getLevel()) / 2) * 100,
+        ((clickIncrement.current * graveDigger.current.getLevel()) / 2) * 100,
       ) / 100;
     updateResources();
   }
@@ -110,10 +105,10 @@ export default function App() {
         lastTime.current = save.lastTime;
         saveInterval.current = save.saveInterval;
         shovel.current.setLevel(save.shovel);
-        farmers.current.setLevel(save.farmers);
-        scythes.current.setLevel(save.scythes);
-        horses.current.setLevel(save.horses);
-        graveDiggers.current.setLevel(save.graveDiggers);
+        farmer.current.setLevel(save.farmers);
+        scythe.current.setLevel(save.scythes);
+        horse.current.setLevel(save.horses);
+        graveDigger.current.setLevel(save.graveDiggers);
         calcClick();
         calcGPS();
 
@@ -145,10 +140,10 @@ export default function App() {
         lastTime.current,
         saveInterval.current,
         shovel.current.getLevel(),
-        farmers.current.getLevel(),
-        scythes.current.getLevel(),
-        horses.current.getLevel(),
-        graveDiggers.current.getLevel(),
+        farmer.current.getLevel(),
+        scythe.current.getLevel(),
+        horse.current.getLevel(),
+        graveDigger.current.getLevel(),
       ),
     );
 
@@ -160,10 +155,10 @@ export default function App() {
     gold.current = 0;
     bones.current = 0;
     shovel.current.setLevel(0);
-    farmers.current.setLevel(0);
-    scythes.current.setLevel(0);
-    horses.current.setLevel(0);
-    graveDiggers.current.setLevel(0);
+    farmer.current.setLevel(0);
+    scythe.current.setLevel(0);
+    horse.current.setLevel(0);
+    graveDigger.current.setLevel(0);
     calcClick();
     calcGPS();
     setDisplayResources({ bones: 0, gold: 0, instant: true });
@@ -237,18 +232,11 @@ export default function App() {
               onPress={click}
               activeOpacity={0.7}
             >
-              <Image
-                style={styles.grave}
-                source={require("./assets/grave.png")}
-              />
+              <Image style={styles.grave} source={images.grave} />
             </TouchableOpacity>
             <View>
               <Text style={styles.counterText}>
-                <Image
-                  style={styles.icons}
-                  source={require("./assets/bone_outline.png")}
-                />{" "}
-                :{" "}
+                <Image style={styles.icons} source={images.bone_outline} /> :{" "}
                 <SmoothNumber
                   style={styles.counterText}
                   value={displayResources.bones}
@@ -263,11 +251,7 @@ export default function App() {
 
               {gold.current || GPS.current ? (
                 <Text style={styles.counterText}>
-                  <Image
-                    style={styles.icons}
-                    source={require("./assets/gold_outline.png")}
-                  />{" "}
-                  :{" "}
+                  <Image style={styles.icons} source={images.gold_outline} /> :{" "}
                   <SmoothNumber
                     style={styles.counterText}
                     value={displayResources.gold}
@@ -288,29 +272,19 @@ export default function App() {
               style={styles.upgradeScrollParent}
             >
               <Farmers
-                farmers={farmers.current}
-                scythe={scythes.current}
-                horses={horses.current}
-                bones={bones}
+                farmers={farmer.current}
+                scythe={scythe.current}
+                horses={horse.current}
                 calcGPS={calcGPS}
               />
-              <Shovel
-                shovel={shovel.current}
-                gold={gold}
-                calcClick={calcClick}
-              />
+              <Shovels shovel={shovel.current} calcClick={calcClick} />
               <GraveDiggers
-                graveDigger={graveDiggers.current}
+                graveDigger={graveDigger.current}
                 click={clickIncrement.current}
-                gold={gold}
                 calcBPS={calcBPS}
               />
-              <Horses horses={horses.current} bones={bones} calcGPS={calcGPS} />
-              <Scythes
-                scythes={scythes.current}
-                gold={gold}
-                calcGPS={calcGPS}
-              />
+              <Horses horses={horse.current} calcGPS={calcGPS} />
+              <Scythes scythes={scythe.current} calcGPS={calcGPS} />
             </ScrollView>
           </View>
         </View>

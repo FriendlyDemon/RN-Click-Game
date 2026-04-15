@@ -4,14 +4,13 @@ import { styles } from "../styles/style";
 import Upgrade from "../classes/Upgrade";
 import values from "../values/Values";
 import { simplifyNumbers } from "../functions/SimplifyNumber";
+import { images } from "../assets/images";
 
 function Horses({
   horses,
-  bones,
   calcGPS,
 }: {
   horses: Upgrade;
-  bones: React.RefObject<number>;
   calcGPS: CallableFunction;
 }) {
   return (
@@ -19,16 +18,13 @@ function Horses({
       style={styles.upgradeBox}
       activeOpacity={0.7}
       onPress={() => {
-        if (horses.buy(bones)) calcGPS();
+        if (horses.buy()) calcGPS();
       }}
     >
       <Text style={styles.UpgradeNameText}>Horses: {horses.getLevel()}</Text>
       <Text style={styles.UpgradeText}>
         Cost: {simplifyNumbers(horses.getCurrentCost())}{" "}
-        <Image
-          style={styles.icons}
-          source={require("../assets/bone_outline.png")}
-        />
+        <Image style={styles.icons} source={images.bone_outline} />
       </Text>
       <Text style={styles.UpgradeText}>
         Bonus production per farmer:{" "}

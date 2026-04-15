@@ -4,18 +4,18 @@ import { styles } from "../styles/style";
 import Upgrade from "../classes/Upgrade";
 import values from "../values/Values";
 import { simplifyNumbers } from "../functions/SimplifyNumber";
+import Farmer from "../classes/Upgrades/Farmer";
+import { images } from "../assets/images";
 
 function Farmers({
   farmers,
   scythe,
   horses,
-  bones,
   calcGPS,
 }: {
-  farmers: Upgrade;
+  farmers: Farmer;
   scythe: Upgrade;
   horses: Upgrade;
-  bones: React.RefObject<number>;
   calcGPS: CallableFunction;
 }) {
   return (
@@ -23,7 +23,7 @@ function Farmers({
       style={styles.upgradeBox}
       activeOpacity={0.7}
       onPress={() => {
-        if (farmers.buy(bones)) calcGPS();
+        if (farmers.buy()) calcGPS();
       }}
     >
       <Text style={styles.UpgradeNameText}>
@@ -31,17 +31,10 @@ function Farmers({
       </Text>
       <Text style={styles.UpgradeText}>
         Cost: {simplifyNumbers(farmers.getCurrentCost())}{" "}
-        <Image
-          style={styles.icons}
-          source={require("../assets/bone_outline.png")}
-        />
+        <Image style={styles.icons} source={images.bone_outline} />
       </Text>
       <Text style={styles.UpgradeText}>
-        <Image
-          style={styles.icons}
-          source={require("../assets/gold_outline.png")}
-        />{" "}
-        :{" "}
+        <Image style={styles.icons} source={images.gold_outline} /> :{" "}
         {simplifyNumbers(
           farmers.getLevel() *
             (1 + scythe.getLevel() * values.SCYTHE_FARMERS_INCREASE) *

@@ -3,16 +3,15 @@ import React from "react";
 import { styles } from "../styles/style";
 import Upgrade from "../classes/Upgrade";
 import { simplifyNumbers } from "../functions/SimplifyNumber";
+import { images } from "../assets/images";
 
 function GraveDiggers({
   graveDigger,
   click,
-  gold,
   calcBPS,
 }: {
   graveDigger: Upgrade;
   click: number;
-  gold: React.RefObject<number>;
   calcBPS: CallableFunction;
 }) {
   return (
@@ -20,7 +19,7 @@ function GraveDiggers({
       style={styles.upgradeBox}
       activeOpacity={0.7}
       onPress={() => {
-        if (graveDigger.buy(gold)) calcBPS();
+        if (graveDigger.buy()) calcBPS();
       }}
     >
       <Text style={styles.UpgradeNameText}>
@@ -28,17 +27,11 @@ function GraveDiggers({
       </Text>
       <Text style={styles.UpgradeText}>
         Cost: {simplifyNumbers(graveDigger.getCurrentCost())}{" "}
-        <Image
-          style={styles.icons}
-          source={require("../assets/gold_outline.png")}
-        />
+        <Image style={styles.icons} source={images.gold_outline} />
       </Text>
       <Text style={styles.UpgradeText}>
-        <Image
-          style={styles.icons}
-          source={require("../assets/bone_outline.png")}
-        />{" "}
-        : {simplifyNumbers((graveDigger.getLevel() * click) / 2)}
+        <Image style={styles.icons} source={images.bone_outline} /> :{" "}
+        {simplifyNumbers((graveDigger.getLevel() * click) / 2)}
         /s
       </Text>
     </TouchableOpacity>

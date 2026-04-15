@@ -3,14 +3,13 @@ import React from "react";
 import { styles } from "../styles/style";
 import Upgrade from "../classes/Upgrade";
 import { simplifyNumbers } from "../functions/SimplifyNumber";
+import { images } from "../assets/images";
 
-function Shovel({
+function Shovels({
   shovel,
-  gold,
   calcClick,
 }: {
   shovel: Upgrade;
-  gold: React.RefObject<number>;
   calcClick: CallableFunction;
 }) {
   return (
@@ -18,7 +17,7 @@ function Shovel({
       style={styles.upgradeBox}
       activeOpacity={0.7}
       onPress={() => {
-        if (shovel.buy(gold)) calcClick();
+        if (shovel.buy()) calcClick();
       }}
     >
       <Text style={styles.UpgradeNameText}>
@@ -26,20 +25,14 @@ function Shovel({
       </Text>
       <Text style={styles.UpgradeText}>
         Cost: {simplifyNumbers(shovel.getCurrentCost())}{" "}
-        <Image
-          style={styles.icons}
-          source={require("../assets/gold_outline.png")}
-        />
+        <Image style={styles.icons} source={images.gold_outline} />
       </Text>
       <Text style={styles.UpgradeText}>
-        <Image
-          style={styles.icons}
-          source={require("../assets/bone_outline.png")}
-        />{" "}
-        per Click: {shovel.getLevel() + 1}
+        <Image style={styles.icons} source={images.bone_outline} /> per Click:{" "}
+        {shovel.getLevel() + 1}
       </Text>
     </TouchableOpacity>
   );
 }
 
-export default Shovel;
+export default Shovels;

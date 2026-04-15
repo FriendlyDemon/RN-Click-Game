@@ -1,5 +1,5 @@
 import { Image, Text, TouchableOpacity } from "react-native";
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { styles } from "../styles/style";
 import Upgrade from "../classes/Upgrade";
 import { simplifyNumbers } from "../functions/SimplifyNumber";
@@ -14,6 +14,12 @@ function GraveDiggers({
   click: number;
   calcBPS: CallableFunction;
 }) {
+  const worth = useRef<string>(
+    simplifyNumbers((graveDigger.getLevel() * click) / 2),
+  );
+  useEffect(() => {
+    worth.current = simplifyNumbers((graveDigger.getLevel() * click) / 2);
+  }, [graveDigger.getLevel(), click]);
   return (
     <TouchableOpacity
       style={styles.upgradeBox}
@@ -31,7 +37,7 @@ function GraveDiggers({
       </Text>
       <Text style={styles.UpgradeText}>
         <Image style={styles.icons} source={images.bone_outline} /> :{" "}
-        {simplifyNumbers((graveDigger.getLevel() * click) / 2)}
+        {worth.current}
         /s
       </Text>
     </TouchableOpacity>

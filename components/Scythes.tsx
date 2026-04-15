@@ -1,5 +1,5 @@
 import { Image, Text, TouchableOpacity } from "react-native";
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { styles } from "../styles/style";
 import Upgrade from "../classes/Upgrade";
 import values from "../values/Values";
@@ -13,6 +13,14 @@ function Scythes({
   scythes: Upgrade;
   calcGPS: CallableFunction;
 }) {
+  const worth = useRef<number>(
+    1 + scythes.getLevel() * values.SCYTHE_FARMERS_INCREASE,
+  );
+
+  useEffect(() => {
+    worth.current = 1 + scythes.getLevel() * values.SCYTHE_FARMERS_INCREASE;
+  }, [scythes.getLevel()]);
+
   return (
     <TouchableOpacity
       style={styles.upgradeBox}
@@ -30,7 +38,7 @@ function Scythes({
       </Text>
       <Text style={styles.UpgradeText}>
         Base <Image style={styles.icons} source={images.gold_outline} /> per
-        farmer: {1 + scythes.getLevel() * values.SCYTHE_FARMERS_INCREASE}
+        farmer: {worth.current}
       </Text>
     </TouchableOpacity>
   );

@@ -1,5 +1,5 @@
 import { Image, Text, TouchableOpacity } from "react-native";
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { styles } from "../styles/style";
 import Upgrade from "../classes/Upgrade";
 import values from "../values/Values";
@@ -13,6 +13,10 @@ function Horses({
   horses: Upgrade;
   calcGPS: CallableFunction;
 }) {
+  const worth = useRef<number>(horses.getLevel() * values.HORSE_BONUS * 100);
+  useEffect(() => {
+    worth.current = horses.getLevel() * values.HORSE_BONUS * 100;
+  }, [horses.getLevel()]);
   return (
     <TouchableOpacity
       style={styles.upgradeBox}
@@ -27,8 +31,7 @@ function Horses({
         <Image style={styles.icons} source={images.bone_outline} />
       </Text>
       <Text style={styles.UpgradeText}>
-        Bonus production per farmer:{" "}
-        {horses.getLevel() * values.HORSE_BONUS * 100}%
+        Bonus production per farmer: {worth.current}%
       </Text>
     </TouchableOpacity>
   );

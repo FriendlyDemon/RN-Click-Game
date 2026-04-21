@@ -12,24 +12,26 @@ function Farmers({
   scythe,
   horses,
   calcGPS,
+  warriors,
 }: {
   farmers: Farmer;
   scythe: Upgrade;
   horses: Upgrade;
   calcGPS: CallableFunction;
+  warriors: React.RefObject<number>;
 }) {
-  const worth = useMemo<string>(
-    () =>
-      simplifyNumbers(
-        farmers.getLevel() *
-          (1 + scythe.getLevel() * values.SCYTHE_FARMERS_INCREASE) *
-          Math.pow(
-            1 + horses.getLevel() * values.HORSE_BONUS,
-            farmers.getLevel(),
-          ),
-      ),
-    [farmers.getLevel(), scythe.getLevel(), horses.getLevel()],
-  );
+  const worth = useMemo<string>(() => {
+    const farmerLevel = farmers.getLevel();
+    const availableFarmers = farmerLevel - warriors.current;
+
+    const scytheBonus = 1 + scythe.getLevel() * values.SCYTHE_FARMERS_INCREASE;
+    const horseBonus = 1 + horses.getLevel() * values.HORSE_BONUS;
+
+    const result =
+      availableFarmers * scytheBonus * Math.pow(horseBonus, farmerLevel);
+
+    return simplifyNumbers(result);
+  }, [farmers.getLevel(), scythe.getLevel(), horses.getLevel(),warriors.current]);
 
   return (
     <TouchableOpacity

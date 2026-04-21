@@ -55,18 +55,36 @@ export default function App() {
   const saveTimer = useRef<number>(0);
   const saveInterval = useRef<number>(15);
   const [showConfig, setShowconfig] = useState<boolean>(false);
+  const warriors = useRef<number>(0);
+
+  function changeWarriors(numberToChange?: number) {
+    const farmerLevel = farmer.current.getLevel();
+
+    if (numberToChange !== undefined) {
+      const newWarriors = warriors.current + numberToChange;
+
+      if (newWarriors < 0 || newWarriors > farmerLevel) return;
+
+      warriors.current = newWarriors;
+      calcGPS();
+    } else {
+      warriors.current = warriors.current === farmerLevel ? 0 : farmerLevel;
+      calcGPS();
+    }
+  }
 
   function calcGPS() {
-    GPS.current =
-      Math.floor(
-        farmer.current.getLevel() *
-          (1 + scythe.current.getLevel() * values.SCYTHE_FARMERS_INCREASE) *
-          Math.pow(
-            1 + horse.current.getLevel() * values.HORSE_BONUS,
-            farmer.current.getLevel(),
-          ) *
-          100,
-      ) / 100;
+    const farmerLevel = farmer.current.getLevel();
+    const availableFarmers = farmerLevel - warriors.current;
+
+    const scytheBonus =
+      1 + scythe.current.getLevel() * values.SCYTHE_FARMERS_INCREASE;
+    const horseBonus = 1 + horse.current.getLevel() * values.HORSE_BONUS;
+
+    const result =
+      availableFarmers * scytheBonus * Math.pow(horseBonus, farmerLevel);
+
+    GPS.current = Math.floor(result * 100) / 100;
     updateResources();
   }
 
@@ -144,6 +162,7 @@ export default function App() {
         scythe.current.getLevel(),
         horse.current.getLevel(),
         graveDigger.current.getLevel(),
+        warriors.current,
       ),
     );
 
@@ -159,6 +178,7 @@ export default function App() {
     scythe.current.setLevel(0);
     horse.current.setLevel(0);
     graveDigger.current.setLevel(0);
+    warriors.current = 0;
     calcClick();
     calcGPS();
     setDisplayResources({ bones: 0, gold: 0, instant: true });
@@ -275,6 +295,7 @@ export default function App() {
                 farmers={farmer.current}
                 scythe={scythe.current}
                 horses={horse.current}
+                warriors={warriors}
                 calcGPS={calcGPS}
               />
               <Shovels shovel={shovel.current} calcClick={calcClick} />
@@ -289,6 +310,27 @@ export default function App() {
           </View>
         </View>
         <View style={styles.bottom}>
+          <Text>{warriors.current}</Text>
+          <View style={{ flexDirection: "row" }}>
+            <Ionicons
+              name="arrow-back"
+              onPress={() => {
+                changeWarriors(-1);
+              }}
+            />
+            <Ionicons
+              name="square"
+              onPress={() => {
+                changeWarriors();
+              }}
+            />
+            <Ionicons
+              name="arrow-forward"
+              onPress={() => {
+                changeWarriors(1);
+              }}
+            />
+          </View>
           <Ionicons
             style={styles.optionsCog}
             name="settings-outline"

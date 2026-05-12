@@ -8,7 +8,6 @@ export default class Save {
   scythes: number;
   horses: number;
   graveDiggers: number;
-  warriors: number;
 
   constructor(
     bones: number,
@@ -20,7 +19,6 @@ export default class Save {
     scythes: number,
     horses: number,
     graveDiggers: number,
-    warriors: number,
   ) {
     this.bones = bones;
     this.gold = gold;
@@ -31,6 +29,5 @@ export default class Save {
     this.scythes = scythes;
     this.horses = horses;
     this.graveDiggers = graveDiggers;
-    this.warriors = warriors;
   }
 }

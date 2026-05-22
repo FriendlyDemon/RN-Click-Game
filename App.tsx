@@ -54,7 +54,7 @@ export default function App() {
   const uiTimer = useRef<number>(0);
   const saveTimer = useRef<number>(0);
   const saveInterval = useRef<number>(15);
-  const [showConfig, setShowconfig] = useState<boolean>(false);
+  const [bottomScreen, setBottomScreen] = useState<string>("");
 
   function calcGPS() {
     const farmerLevel = farmer.current.getLevel();
@@ -288,15 +288,40 @@ export default function App() {
             </ScrollView>
           </View>
         </View>
-        <View style={styles.bottom}>
+        <View style={styles.middle}>
+          <View style={styles.middleButtonsView}>
+            <TouchableOpacity
+              style={styles.middleButtons}
+              onPress={() => {
+                setBottomScreen((prev) => {
+                  if (prev == "placeholder") {
+                    return "";
+                  }
+                  return "placeholder";
+                });
+              }}
+            >
+              <Text>Place Holder</Text>
+            </TouchableOpacity>
+          </View>
           <Ionicons
-            style={styles.optionsCog}
+            style={[
+              styles.optionsCog,
+              bottomScreen == "config" ? { color: "black" } : {},
+            ]}
             name="settings-outline"
             onPress={() => {
-              setShowconfig((prev) => !prev);
+              setBottomScreen((prev) => {
+                if (prev == "config") {
+                  return "";
+                }
+                return "config";
+              });
             }}
           />
-          {showConfig ? (
+        </View>
+        <View style={styles.bottom}>
+          {bottomScreen == "config" ? (
             <View style={styles.options}>
               <Text
                 onPress={() => {

@@ -23,7 +23,7 @@ function Horses({
         if (horses.buy()) calcGPS();
       }}
     >
-      <Text style={styles.UpgradeNameText}>Horses: {horses.getLevel()}</Text>
+      <Text style={styles.UpgradeNameText}>Skeleton Horses: {horses.getLevel()}</Text>
       <Text style={styles.UpgradeText}>
         Cost: {simplifyNumbers(horses.getCurrentCost())}{" "}
         <Image style={styles.icons} source={images.bone_outline} />

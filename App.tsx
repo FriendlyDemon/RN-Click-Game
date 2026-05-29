@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   Alert,
@@ -55,6 +55,28 @@ export default function App() {
   const saveTimer = useRef<number>(0);
   const saveInterval = useRef<number>(15);
   const [bottomScreen, setBottomScreen] = useState<string>("");
+  const [buyAmmount, setBuyAmmount] = useState<number | "MAX">(1);
+
+  const farmerAmmount = useMemo(
+    () => farmer.current.getCurrentCost(buyAmmount),
+    [farmer.current.getLevel(), displayResources.bones, buyAmmount],
+  );
+  const shovelAmmount = useMemo(
+    () => shovel.current.getCurrentCost(buyAmmount),
+    [shovel.current.getLevel(), displayResources.gold, buyAmmount],
+  );
+  const scytheAmmount = useMemo(
+    () => scythe.current.getCurrentCost(buyAmmount),
+    [scythe.current.getLevel(), displayResources.gold, buyAmmount],
+  );
+  const horseAmmount = useMemo(
+    () => horse.current.getCurrentCost(buyAmmount),
+    [horse.current.getLevel(), displayResources.bones, buyAmmount],
+  );
+  const graveDiggerAmmount = useMemo(
+    () => graveDigger.current.getCurrentCost(buyAmmount),
+    [graveDigger.current.getLevel(), displayResources.gold, buyAmmount],
+  );
 
   function calcGPS() {
     const farmerLevel = farmer.current.getLevel();
@@ -276,15 +298,29 @@ export default function App() {
                 scythe={scythe.current}
                 horses={horse.current}
                 calcGPS={calcGPS}
+                ammount={farmerAmmount}
               />
-              <Shovels shovel={shovel.current} calcClick={calcClick} />
+              <Shovels
+                shovel={shovel.current}
+                calcClick={calcClick}
+                ammount={shovelAmmount}
+              />
               <GraveDiggers
                 graveDigger={graveDigger.current}
                 click={clickIncrement.current}
                 calcBPS={calcBPS}
+                ammount={graveDiggerAmmount}
               />
-              <Horses horses={horse.current} calcGPS={calcGPS} />
-              <Scythes scythes={scythe.current} calcGPS={calcGPS} />
+              <Horses
+                horses={horse.current}
+                calcGPS={calcGPS}
+                ammount={horseAmmount}
+              />
+              <Scythes
+                scythes={scythe.current}
+                calcGPS={calcGPS}
+                ammount={scytheAmmount}
+              />
             </ScrollView>
           </View>
         </View>
@@ -301,13 +337,37 @@ export default function App() {
                 });
               }}
             >
-              <Text>Place Holder</Text>
+              <Text style={styles.middleText}>Place Holder</Text>
             </TouchableOpacity>
           </View>
+          <TouchableOpacity
+            style={[styles.middleButtons, { width: 45, alignItems: "center" }]}
+            onPress={() => {
+              setBuyAmmount((prev) => {
+                switch (prev) {
+                  case 1:
+                    return 5;
+                  case 5:
+                    return 10;
+                  case 10:
+                    return "MAX";
+                  default:
+                    return 1;
+                }
+              });
+            }}
+          >
+            <Text style={styles.middleText}>
+              {buyAmmount == "MAX" ? "MAX" : `x${buyAmmount}`}
+            </Text>
+          </TouchableOpacity>
+
           <Ionicons
             style={[
               styles.optionsCog,
-              bottomScreen == "config" ? { color: "black" } : {},
+              bottomScreen == "config"
+                ? { color: "#00000080" }
+                : { color: "#ffffff80" },
             ]}
             name="settings-outline"
             onPress={() => {

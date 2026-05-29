@@ -9,23 +9,31 @@ import { images } from "../assets/images";
 function Horses({
   horses,
   calcGPS,
+  ammount,
 }: {
   horses: Upgrade;
   calcGPS: CallableFunction;
+  ammount: [number, number];
 }) {
-  const worth = useMemo<number>(() =>  horses.getLevel() * values.HORSE_BONUS * 100, [horses.getLevel()]);
+  const worth = useMemo<number>(
+    () => horses.getLevel() * values.HORSE_BONUS * 100,
+    [horses.getLevel()],
+  );
 
   return (
     <TouchableOpacity
-      style={styles.upgradeBox}
+      style={[styles.upgradeBox,{opacity:horses.canBuy(ammount[1])?1:0.5}]}
       activeOpacity={0.7}
       onPress={() => {
-        if (horses.buy()) calcGPS();
+        if (horses.buy(ammount)) calcGPS();
       }}
     >
-      <Text style={styles.UpgradeNameText}>Skeleton Horses: {horses.getLevel()}</Text>
+      <Text style={styles.UpgradeNameText}>
+        Skeleton Horses: {horses.getLevel()}
+        {ammount[0] > 1 ? ` + ${ammount[0]}` : null}
+      </Text>
       <Text style={styles.UpgradeText}>
-        Cost: {simplifyNumbers(horses.getCurrentCost())}{" "}
+        Cost: {simplifyNumbers(ammount[1])}{" "}
         <Image style={styles.icons} source={images.bone_outline} />
       </Text>
       <Text style={styles.UpgradeText}>

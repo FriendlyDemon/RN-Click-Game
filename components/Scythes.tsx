@@ -9,9 +9,11 @@ import { images } from "../assets/images";
 function Scythes({
   scythes,
   calcGPS,
+  ammount,
 }: {
   scythes: Upgrade;
   calcGPS: CallableFunction;
+  ammount: [number, number];
 }) {
   const worth = useMemo<number>(
     () => 1 + scythes.getLevel() * values.SCYTHE_FARMERS_INCREASE,
@@ -20,17 +22,18 @@ function Scythes({
 
   return (
     <TouchableOpacity
-      style={styles.upgradeBox}
+      style={[styles.upgradeBox,{opacity:scythes.canBuy(ammount[1])?1:0.5}]}
       activeOpacity={0.7}
       onPress={() => {
-        if (scythes.buy()) calcGPS();
+        if (scythes.buy(ammount)) calcGPS();
       }}
     >
       <Text style={styles.UpgradeNameText}>
         Scythe Level: {scythes.getLevel()}
+        {ammount[0] > 1 ? ` + ${ammount[0]}` : null}
       </Text>
       <Text style={styles.UpgradeText}>
-        Cost: {simplifyNumbers(scythes.getCurrentCost())}{" "}
+        Cost: {simplifyNumbers(ammount[1])}{" "}
         <Image style={styles.icons} source={images.gold_outline} />
       </Text>
       <Text style={styles.UpgradeText}>

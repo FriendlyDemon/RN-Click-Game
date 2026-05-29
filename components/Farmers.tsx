@@ -12,11 +12,13 @@ function Farmers({
   scythe,
   horses,
   calcGPS,
+  ammount,
 }: {
   farmers: Farmer;
   scythe: Upgrade;
   horses: Upgrade;
   calcGPS: CallableFunction;
+  ammount: [number, number];
 }) {
   const worth = useMemo<string>(() => {
     const farmerLevel = farmers.getLevel();
@@ -32,17 +34,18 @@ function Farmers({
 
   return (
     <TouchableOpacity
-      style={styles.upgradeBox}
+      style={[styles.upgradeBox,{opacity:farmers.canBuy(ammount[1])?1:0.5}]}
       activeOpacity={0.7}
       onPress={() => {
-        if (farmers.buy()) calcGPS();
+        if (farmers.buy(ammount)) calcGPS();
       }}
     >
       <Text style={styles.UpgradeNameText}>
         Skeleton Farmers: {farmers.getLevel()}
+        {ammount[0] > 1 ? ` + ${ammount[0]}` : null}
       </Text>
       <Text style={styles.UpgradeText}>
-        Cost: {simplifyNumbers(farmers.getCurrentCost())}{" "}
+        Cost: {simplifyNumbers(ammount[1])}{" "}
         <Image style={styles.icons} source={images.bone_outline} />
       </Text>
       <Text style={styles.UpgradeText}>

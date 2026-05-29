@@ -9,10 +9,12 @@ function GraveDiggers({
   graveDigger,
   click,
   calcBPS,
+  ammount,
 }: {
   graveDigger: Upgrade;
   click: number;
   calcBPS: CallableFunction;
+  ammount: [number, number];
 }) {
   const worth = useMemo<string>(
     () => simplifyNumbers((graveDigger.getLevel() * click) / 2),
@@ -21,17 +23,18 @@ function GraveDiggers({
 
   return (
     <TouchableOpacity
-      style={styles.upgradeBox}
+      style={[styles.upgradeBox,{opacity:graveDigger.canBuy(ammount[1])?1:0.5}]}
       activeOpacity={0.7}
       onPress={() => {
-        if (graveDigger.buy()) calcBPS();
+        if (graveDigger.buy(ammount)) calcBPS();
       }}
     >
       <Text style={styles.UpgradeNameText}>
         Grave Diggers: {graveDigger.getLevel()}
+        {ammount[0] > 1 ? ` + ${ammount[0]}` : null}
       </Text>
       <Text style={styles.UpgradeText}>
-        Cost: {simplifyNumbers(graveDigger.getCurrentCost())}{" "}
+        Cost: {simplifyNumbers(ammount[1])}{" "}
         <Image style={styles.icons} source={images.gold_outline} />
       </Text>
       <Text style={styles.UpgradeText}>

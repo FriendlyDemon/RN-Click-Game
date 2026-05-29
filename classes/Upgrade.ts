@@ -19,13 +19,31 @@ export default class Upgrade {
 
   buy(numberToBuy?: number): boolean {
     if (this.resource.current >= this.getCurrentCost(numberToBuy)) {
-      this.resource.current -= numberToBuy
-        ? this.getCurrentCost(numberToBuy)
-        : this.getCurrentCost();
+      this.resource.current -= this.getCurrentCost(numberToBuy);
       this.level += numberToBuy || 1;
       return true;
     }
     return false;
+  }
+
+  getMaxCost(resource: number): [number, number] {
+    let levels = 0;
+    let totalCost = 0;
+
+    for (let nextLevel = 1; ; nextLevel++) {
+      const levelCost = Math.floor(
+        this.cost * Math.pow(this.costMult, this.level + nextLevel - 1),
+      );
+
+      if (totalCost + levelCost > resource) {
+        break;
+      }
+
+      totalCost += levelCost;
+      levels = nextLevel;
+    }
+
+    return [levels, totalCost];
   }
 
   setLevel(newLevel: number): void {

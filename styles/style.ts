@@ -69,10 +69,10 @@ export const styles = StyleSheet.create({
   middle: {
     height: 50,
     flexDirection: "row",
-    borderStyle: "solid",
-    borderColor: "black",
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
+    alignItems: "center",
+    boxShadow: "1px 5px 10px 5px #00000040",
+    zIndex: 1,
+    backgroundColor: "#444455",
   },
   middleButtonsView: {
     flex: 1,
@@ -88,7 +88,7 @@ export const styles = StyleSheet.create({
     height: 40,
     padding: 5,
     boxShadow: "1px 5px 10px 1px #00000040",
-  },
+  },middleText:{color:"#dddddd"},
   bottom: { flex: 1, backgroundColor: "#dddddd" },
   optionsCog: { fontSize: 40, width: 40, color: "grey" },
   options: {

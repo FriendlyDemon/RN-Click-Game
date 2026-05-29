@@ -8,13 +8,13 @@ export default class Upgrade {
     if (numberToBuy) {
       let newCost = 0;
       for (let x = 0; x < numberToBuy; x++) {
-        newCost += Math.round(
+        newCost += Math.floor(
           this.cost * Math.pow(this.costMult, this.level + x),
         );
       }
       return newCost;
     }
-    return Math.round(this.cost * Math.pow(this.costMult, this.level));
+    return Math.floor(this.cost * Math.pow(this.costMult, this.level));
   }
 
   buy(numberToBuy?: number): boolean {
